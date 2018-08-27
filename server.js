@@ -18,7 +18,7 @@ server.get('/', (req, res) => {
 				<a href="questao6"> Questao 6 </a> <br>
 				<a href="questao7"> Questao 7 </a> <br>
 				<a href="questao8"> Questao 8 </a> <br>
-				<a href="questao9"> Questao 9 </a> <br>
+				<!--<a href="questao9"> Questao 9 </a> <br>-->
 			<div>
 		`)
 })
@@ -40,6 +40,10 @@ server.get('/questao1', (req, res) => {
 					<br><br>
 					<input type="submit" value="Calcular Reajuste">
 				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Cargo operador: Reajuste de 20%</p>
+				<p>Cargo programador: Reajuste de 18%</p>
 			<div>
 		`)
 })
@@ -82,6 +86,10 @@ server.get('/questao2', (req, res) => {
 					<br><br>
 					<input type="submit" value="Submeter">
 				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Sexo masculino: Maioridade a partir de 18 anos</p>
+				<p>Sexo feminino: Maioridade a partir de 21 anos</p>
 			</div>
 		`)
 })
@@ -128,6 +136,12 @@ server.get('/questao3', (req, res) => {
 					<br><br>
 					<input type="submit" value="Submeter">
 				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Media aritmetica entre N1 e N2 >= 7.0: Aprovado(a)!</p>
+				<p>Media aritmetica entre N1 e N2 >= 3.0 e menor que 7.0: Estudante devera realizar N3!</p>
+				<p>Media aritmetica (N1 e N2) + N3 / 2 >= 5.0: Aprovado(a)</p>
+				<p>Demais casos: Reprovado(a)</p>
 			</div>
 		`)
 })
@@ -170,6 +184,10 @@ server.get('/questao4', (req, res) => {
 					<br><br>
 					<input type="submit" value="Calcular peso Ideal">
 				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Sexo masculino: (72.7 * altura) -58</p>
+				<p>Sexo feminino:  (62.1 * altura) -44.7</p>
 			</div>
 		`)
 })
@@ -209,6 +227,13 @@ server.get('/questao5', (req, res) => {
 					<br><br>
 					<input type="submit" value="Verificar categoria">
 				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Categoria Infantil A: 5  -  7 anos</p>
+				<p>Categoria Infantil B: 8  - 10 anos</p>
+				<p>Categoria Juvenil  A: 11 - 13 anos</p>
+				<p>Categoria Juvenil  B: 14 - 17 anos</p>
+				<p>Categoria Adulto    : Maiores de 18 anos</p>
 			</div>
 		`)
 })
@@ -244,11 +269,17 @@ server.get('/questao6', (req, res) => {
 					<input type="nivel" name="nivel" id="nivel"><br>
 					<label for="salBruto"> Salario Bruto:</label>
 					<input type="salBruto" name="salBruto" id="salBruto"><br>
-					<label for="numDepend"> Numero dependentes:</label>
+					<label for="numDepend"> Nº dependentes:</label>
 					<input type="numDepend" name="numDepend" id="numDepend"><br>
 					<br><br>
 					<input type="submit" value="Submeter">
 				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Nivel A: Desconto de 3% caso não houver dependentes e  8% caso houver</p>
+				<p>Nivel B: Desconto de 5% caso não houver dependentes e  10% caso houver</p>
+				<p>Nivel C: Desconto de 8% caso não houver dependentes e  15% caso houver</p>
+				<p>Nivel D: Desconto de 10% caso não houver dependentes e 17% caso houver</p>
 			</div>
 		`)
 })
@@ -300,9 +331,99 @@ server.post('/salarioLiquido', (req, res)=>{
 		default:
 		res.send('<h1>Verifique os valores inseridos e tente novamente!</h1>')
 	}
-
 })
 
+
+server.get('/questao7', (req, res) => {
+	res.send(`
+			<h1>Questao #7: Verifica Aposentadoria</h1>
+			<div align="center">
+				<form action ="/verificaAposentadoria" method="POST">
+					<p> Insira a seguir a idade, sexo (masculino ou feminino) e tempo de servico do funcionario: </p>
+					<label for="idade"> Idade:</label>
+					<input type="idade" name="idade" id="idade"><br>
+					<label for="sexo"> Sexo:</label>
+					<input type="sexo" name="sexo" id="sexo"><br>
+					<label for="tempoServ"> Tempo servico:</label>
+					<input type="tempoServ" name="tempoServ" id="tempoServ"> <br><br>
+					<input type="submit" value="Submeter">
+				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Sexo masculino: Minimo 65 anos de idade e ter trabalhado por no minimo 30 anos</p>
+				<p>Sexo feminino: Minimo 60 anos de idade e ter trabalhado por no minimo 25 anos</p>
+			</div>
+		`)
+})
+
+server.post('/verificaAposentadoria', (req, res)=>{
+	var idade = parseInt(req.body.idade)
+	var tempoServ = parseInt(req.body.tempoServ)
+	var sexo = req.body.sexo
+
+	switch(sexo){
+		case 'masculino':
+			if(idade >= 65 && tempoServ >= 30){
+				res.send('<h1>Trabalhador - Idade: ' +idade +' | Tempo de Servico ' +tempoServ +' Sexo: ' +sexo +'<br> Status: Apto para aposentadoria!</h1>')
+			}else{
+				res.send('<h1>Trabalhador - Idade: ' +idade +' | Tempo de Servico ' +tempoServ +' Sexo: ' +sexo +'<br> Status: Inapto para aposentadoria!</h1>')
+			}
+		break;
+
+		case 'feminino':
+		if(idade >= 60 && tempoServ >= 25){
+				res.send('<h1>Trabalhadora - Idade: ' +idade +' | Tempo de Servico ' +tempoServ +' Sexo: ' +sexo +'<br> Status: Apta para aposentadoria!</h1>')
+			}else{
+				res.send('<h1>Trabalhadora - Idade: ' +idade +' | Tempo de Servico ' +tempoServ +' Sexo: ' +sexo +'<br> Status: Inapta para aposentadoria!</h1>')
+			}
+		break;
+
+		default:
+			res.send('<h1>Verifique os valores inseridos e tente novamente!</h1>')
+	}
+})
+
+
+server.get('/questao8', (req, res) => {
+	res.send(`
+			<h1>Questao #8: Concessao de Credito</h1>
+			<div align="center">
+				<form action ="/concedeCredito" method="POST">
+					<p> Insira a seguir o saldo medio do cliente no ano anterior: </p>
+					<label for="saldoMedio"> Saldo Medio:</label>
+					<input type="saldoMedio" name="saldoMedio" id="saldoMedio"><br>
+					<br><br>
+					<input type="submit" value="Submeter">
+				</form>
+				<br>
+				<h2> Valores de referencia:</h2>
+				<p>Saldo Medio de 0 a 200: Nenhum Credito</p>
+				<p>Saldo Medio de 201 a 400: 20% do valor do saldo medio</p>
+				<p>Saldo Medio de 401 a 600: 30% do valor do saldo medioo</p>
+				<p>Saldo Medio acima de 601: 40% do valor do saldo medio</p>
+			</div>
+		`)
+})
+
+server.post('/concedeCredito', (req, res)=>{
+	var saldoMedio = parseFloat(req.body.saldoMedio)
+	var credito = null
+
+	if(saldoMedio < 201){
+		res.send('<h1>Saldo Medio do Cliente: ' +saldoMedio +' <br> Nenhum credito especial disponivel!</h1>')
+	}else if(saldoMedio >= 201 && saldoMedio < 401){
+		credito = (saldoMedio * 0.2)
+		res.send('<h1>Saldo Medio do Cliente: ' +saldoMedio +' | Percentual de credito disponivel: 20%. <br><br>Credito Disponivel: ' +credito +' </h1>')
+	}else if(saldoMedio >= 401 && saldoMedio < 601){
+		credito = (saldoMedio * 0.3)
+		res.send('<h1>Saldo Medio do Cliente: ' +saldoMedio +' | Percentual de credito disponivel: 30%. <br><br>Credito Disponivel: ' +credito +' </h1>')
+	}else if(saldoMedio >= 601){
+		credito = (saldoMedio * 0.4)
+		res.send('<h1>Saldo Medio do Cliente: ' +saldoMedio +' | Percentual de credito disponivel: 40%. <br><br>Credito Disponivel: ' +credito +' </h1>')
+	}else{
+		res.send('<h1>Verifique os valores inseridos e tente novamente!</h1>')
+	}
+})
 
 
 server.listen(3001, () =>{/*Colocar servidor em funcionamento*/
